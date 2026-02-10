@@ -1,5 +1,5 @@
 
-# Ahken Labs - Company Website
+# Portfolio Website - Personal
 
 This is my Personal Portfolio Wesite, built using Next.js with TypeScript, Tailwind + css, featuring reusable components, smooth animations, and scalable architecture.
 
