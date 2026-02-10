@@ -11,7 +11,7 @@ This is my Personal Portfolio Wesite, built using Next.js with TypeScript, Tailw
 
 ```bash
 git clone <repository-url>
-cd Ahken-Labs
+cd portfolio-website
 ```
 
 ### 2. Install Dependencies
