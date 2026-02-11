@@ -45,7 +45,7 @@ export default function Header() {
   const [bubbleBelow, setBubbleBelow] = useState<Record<string, boolean>>({});
 
   // header top safe area
-  const headerTop = useMemo(() => `calc(env(safe-area-inset-top, 0px) + 12px)`, []);
+  const headerTop = useMemo(() => `calc(env(safe-area-inset-top, 0px) + 20px)`, []);
 
   /* ---------- responsive ---------- */
   useEffect(() => {

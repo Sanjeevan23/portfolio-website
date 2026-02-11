@@ -10,8 +10,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      {/* ensure Tailwind utilities for background/text are applied */}
-      <body className="bg-black text-white min-h-screen">
+      <body>
         {children}
       </body>
     </html>

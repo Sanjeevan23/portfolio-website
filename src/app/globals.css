@@ -1,52 +1,113 @@
 @import "tailwindcss";
 
-/* --- theme vars --- */
-/* base page */
 html,
 body {
-    background: #050505;
-    /* black background */
-    color: #fff;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    height: 100%;
+  background: #050505;
+  color: #fff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: 100%;
 }
 
 :root {
-    --glass-border: rgba(255, 255, 255, 0.06);
-    --glass-bg-1: rgba(255, 255, 255, 0.03);
-    --glass-bg-2: rgba(255, 255, 255, 0.02);
+  --glass-border: rgba(255, 255, 255, 0.06);
+  --glass-bg-1: rgba(255, 255, 255, 0.03);
+  --glass-bg-2: rgba(255, 255, 255, 0.02);
+  --bg-900: #040405;
+  --bg-800: #061018;
 }
 
-/* glass card */
-.glass-card{
-  background: linear-gradient(180deg, var(--glass-bg-1), var(--glass-bg-2));
-  border: 1px solid var(--glass-border);
-  box-shadow: 0 10px 30px rgba(2,6,23,0.48);
+/* make sure your header glass still uses gold accents where needed */
+.glass-glow {
+  background: linear-gradient(90deg, rgba(246, 200, 90, 0.12), rgba(196, 139, 40, 0.06));
+  filter: blur(20px);
+}
+
+/* header glass */
+.glass-card {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  box-shadow: var(--gold-shadow);
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
 }
 
+/* CTA gold */
+.btn-gold {
+  background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+  color: #0b0b0b;
+  box-shadow: 0 8px 28px rgba(198, 139, 40, 0.12);
+}
+
+/* subtle chip for tech tags */
+.chip {
+  background: rgba(255, 255, 255, 0.04);
+  padding: .25rem .6rem;
+  border-radius: 999px;
+  font-size: .75rem;
+}
+
 /* glow */
-.glass-glow{
-  background: linear-gradient(90deg, rgba(246,200,90,0.12), rgba(196,139,40,0.06));
+.glass-glow {
+  background: linear-gradient(90deg, rgba(246, 200, 90, 0.12), rgba(196, 139, 40, 0.06));
   filter: blur(20px);
 }
 
 /* mobile icon states */
 .active-icon {
-  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
-  box-shadow: 0 6px 14px rgba(0,0,0,0.42);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.42);
   border-radius: 10px;
-  border: 1px solid rgba(255,255,255,0.04);
+  border: 1px solid rgba(255, 255, 255, 0.04);
 }
-.inactive-icon { background: transparent; }
+
+.inactive-icon {
+  background: transparent;
+}
 
 /* accessibility focus */
-button:focus { outline: 2px solid rgba(255,255,255,0.06); outline-offset: 3px; }
-* { backface-visibility: hidden; -webkit-font-smoothing: antialiased; }
+button:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.06);
+  outline-offset: 3px;
+}
+
+* {
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+}
 
 @media (prefers-reduced-motion: reduce) {
-  .glass-card { transition: none !important; }
-  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  .glass-card {
+    transition: none !important;
+  }
+
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* make canvas visible and behind overlay */
+.hero-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.hero-overlay {
+  z-index: 30;
+  pointer-events: auto;
+}
+
+/* contact modal priority */
+.contact-modal {
+  z-index: 60;
+}
+
+/* reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
 }

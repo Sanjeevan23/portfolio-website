@@ -1,12 +1,11 @@
 import Header from "../components/Header";
+import HeroScreen from "../Sections/HeroScreen";
 
 export default function Page() {
     return (
         <main>
             <Header />
-            <section id="about" className="h-screen flex items-center justify-center">
-                <h1 className="text-4xl">About Section</h1>
-            </section>
+            <HeroScreen />
             <section id="skills" className="h-screen flex items-center justify-center">
                 <h1 className="text-4xl">Skills Section</h1>
             </section>
