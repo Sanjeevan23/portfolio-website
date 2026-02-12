@@ -10,7 +10,6 @@ body {
 }
 
 :root {
-  --glass-border: rgba(255, 255, 255, 0.06);
   --glass-bg-1: rgba(255, 255, 255, 0.03);
   --glass-bg-2: rgba(255, 255, 255, 0.02);
   --bg-900: #040405;
@@ -64,13 +63,6 @@ body {
 .inactive-icon {
   background: transparent;
 }
-
-/* accessibility focus */
-button:focus {
-  outline: 2px solid rgba(255, 255, 255, 0.06);
-  outline-offset: 3px;
-}
-
 * {
   backface-visibility: hidden;
   -webkit-font-smoothing: antialiased;
@@ -110,4 +102,25 @@ button:focus {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
   }
+}
+
+/* Disable text selection everywhere inside header */
+.no-select,
+.no-select * {
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  -webkit-touch-callout: none; /* iOS long press menu */
+}
+
+/* Prevent image dragging */
+.no-drag img,
+.no-drag svg {
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+.clickable {
+  cursor: pointer;
 }

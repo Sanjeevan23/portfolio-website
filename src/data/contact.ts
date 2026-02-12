@@ -1,3 +1,4 @@
+//src/data/contact.ts
 export const contact = {
   whatsapp: {
     number: '94762360948',

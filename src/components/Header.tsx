@@ -1,7 +1,7 @@
 // src/components/Header/Header.tsx
 'use client';
 
-import React, {
+import {
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -55,7 +55,7 @@ export default function Header() {
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
-  /* ---------- IntersectionObserver scroll-spy (non-aggressive) ---------- */
+  /* ---------- IntersectionObserver scroll-spy (robust) ---------- */
   useEffect(() => {
     if (mountedRef.current) return;
     mountedRef.current = true;
@@ -65,30 +65,48 @@ export default function Header() {
 
     const observerOptions: IntersectionObserverInit = {
       root: null,
-      rootMargin: `-28% 0px -45% 0px`,
+      rootMargin: '0px 0px -40% 0px', // keep top edge normal, only shrink bottom viewport for "in-view" decisions
       threshold: [0, 0.1, 0.4, 0.6, 0.9, 1],
     };
 
-    const onIntersect: IntersectionObserverCallback = (entries) => {
+    // robust function to pick the section with largest visible height
+    const updateActiveFromRects = () => {
       if (suppressObserverRef.current) return;
 
-      const visible = entries
-        .filter((e) => e.isIntersecting)
-        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      let bestId: string | null = null;
+      let bestVisible = -1;
+      const vh = window.innerHeight || document.documentElement.clientHeight;
 
-      if (visible) {
-        const id = visible.target.id;
-        if (id && id !== active) {
-          setActive(id);
+      sections.forEach((el) => {
+        const r = el.getBoundingClientRect();
+        const visibleHeight = Math.max(0, Math.min(r.bottom, vh) - Math.max(r.top, 0));
+        if (visibleHeight > bestVisible) {
+          bestVisible = visibleHeight;
+          bestId = el.id;
         }
+      });
+      // If scrolled all the way to top, ensure 'about' is active
+      if (window.scrollY === 0) bestId = 'about';
+      if (bestId !== null) {
+        setActive(prev => (prev === bestId ? prev : bestId as string));
       }
+    };
+
+    // IntersectionObserver will trigger during scroll; use it to call our robust picker
+    const onIntersect: IntersectionObserverCallback = () => {
+      updateActiveFromRects();
     };
 
     const io = new IntersectionObserver(onIntersect, observerOptions);
     sections.forEach((s) => io.observe(s));
+
+    // init immediately so active is correct on mount (fixes "not active until click")
+    updateActiveFromRects();
+
     return () => io.disconnect();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
 
   /* ---------- suppress observer helper ---------- */
   const suppressObserver = (ms = 900) => {
@@ -101,16 +119,18 @@ export default function Header() {
     }, ms);
   };
 
-  /* ---------- scrollTo with immediate visual feedback ---------- */
-  const scrollTo = useCallback((id: string) => {
+  const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (!el) return;
 
-    // set active immediately so pill moves instantly
-    setActive(id);
-    suppressObserver(900);
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, []);
+    // measure header height dynamically (covers mobile/desktop)
+    const headerEl = document.querySelector('header');
+    const headerHeight = headerEl ? Math.ceil(headerEl.getBoundingClientRect().height) : 80;
+    const extraOffset = 8; // breathing room below header
+
+    const top = el.getBoundingClientRect().top + window.scrollY - headerHeight - extraOffset;
+    window.scrollTo({ top, behavior: 'smooth' });
+  };
 
   /* ---------- measure pill position & bubble direction ---------- */
   const measure = useCallback(() => {
@@ -199,7 +219,7 @@ export default function Header() {
   const tapScale = shouldReduceMotion ? 0.98 : 0.94;
 
   return (
-    <header style={{ top: headerTop }} className="fixed left-4 right-4 z-50 pointer-events-auto">
+    <header style={{ top: headerTop }} className="fixed left-4 right-4 z-50 pointer-events-auto no-select no-drag">
       <div className="mx-auto max-w-7xl">
         <div className="relative">
           {/* GLASS CARD */}
@@ -217,7 +237,8 @@ export default function Header() {
                   }}
                   whileTap={{ scale: tapScale }}
                   transition={{ duration: 0.08 }}
-                  className="flex items-center gap-3 focus:outline-none"
+                  className="flex items-center gap-3 focus:outline-none clickable"
+                  
                   aria-label="Go to top"
                 >
                   <motion.span
@@ -236,7 +257,7 @@ export default function Header() {
                     scrollTo('about');
                   }}
                   whileTap={{ scale: tapScale }}
-                  className="w-10 h-10 rounded-full bg-white/6 flex items-center justify-center backdrop-blur-sm focus:outline-none"
+                  className="w-10 h-10 rounded-full bg-white/6 flex items-center justify-center backdrop-blur-sm focus:outline-none clickable"
                   aria-label="logo"
                 >
                   <motion.span
@@ -276,7 +297,7 @@ export default function Header() {
                               onBlur={() => {
                                 setShowLabelFor((prev) => (prev === tab.id ? null : prev));
                               }}
-                              className="w-[130px] h-12 flex items-center justify-center rounded-lg text-sm font-medium text-white/90 focus:outline-none"
+                              className="w-[130px] h-12 flex items-center justify-center rounded-lg text-sm font-medium text-white/90 focus:outline-none clickable"
                               aria-current={isActive ? 'page' : undefined}
                             >
                               <span className={`select-none ${isActive ? 'text-white' : 'text-white/85'}`}>
@@ -328,7 +349,7 @@ export default function Header() {
                             onFocus={() => setShowLabelFor(tab.id)}
                             onBlur={() => setShowLabelFor((prev) => (prev === tab.id ? null : prev))}
                             whileTap={{ scale: tapScale }}
-                            className={`w-11 h-11 rounded-xl flex items-center justify-center focus:outline-none transition-transform ${isActive ? 'active-icon' : 'inactive-icon'}`}
+                            className={`clickable w-11 h-11 rounded-xl flex items-center justify-center focus:outline-none transition-transform ${isActive ? 'active-icon' : 'inactive-icon'}`}
                             aria-current={isActive ? 'page' : undefined}
                             aria-label={tab.label}
                           >
