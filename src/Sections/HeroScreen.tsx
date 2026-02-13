@@ -43,7 +43,7 @@ function HorizonSilhouette({ radius = 140, thickness = 0.18, yOffset = -28 }: { 
     }, [glowTex]);
 
     return (
-        <group position={[0, -radius + yOffset, isMobile? -32:-30]} rotation={[Math.PI * 0.005, 0, 0]}>
+        <group position={[0, -radius + yOffset, isMobile ? -32 : -30]} rotation={[Math.PI * 0.005, 0, 0]}>
             <mesh renderOrder={300} receiveShadow>
                 <torusGeometry args={[radius, thickness, 24, 200, Math.PI * 1.8]} />
                 <meshStandardMaterial color="#04060a" roughness={1} metalness={0.02} depthTest={false} />
