@@ -63,6 +63,7 @@ body {
 .inactive-icon {
   background: transparent;
 }
+
 * {
   backface-visibility: hidden;
   -webkit-font-smoothing: antialiased;
@@ -86,6 +87,7 @@ body {
   z-index: 0;
   pointer-events: none;
 }
+
 .hero-overlay {
   z-index: 30;
   pointer-events: auto;
@@ -111,7 +113,8 @@ body {
   -ms-user-select: none;
   user-select: none;
 
-  -webkit-touch-callout: none; /* iOS long press menu */
+  -webkit-touch-callout: none;
+  /* iOS long press menu */
 }
 
 /* Prevent image dragging */
@@ -123,4 +126,223 @@ body {
 
 .clickable {
   cursor: pointer;
+}
+
+
+.edge-fade::before,
+.edge-fade::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+/* top + bottom */
+.edge-fade::before {
+  background:
+    linear-gradient(to bottom, #020204 0%, transparent 18%),
+    linear-gradient(to top, #020204 0%, transparent 18%);
+}
+
+/* left + right */
+.edge-fade::after {
+  background:
+    linear-gradient(to right, #020204 0%, transparent 14%),
+    linear-gradient(to left, #020204 0%, transparent 14%);
+}
+
+
+
+
+
+
+/* -------------------------
+   Footer: cleaned & improved
+   ------------------------- */
+
+.mobile-orbit-absolute {
+  position: absolute;
+  right: 12px;
+  top: 0%;
+  transform: translateY(-50%);
+  width: 140px;
+  height: 220px;
+  pointer-events: none;
+  z-index: 30;
+  display: block;
+}
+
+/* SOCIAL ICONS */
+.social-icon {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  transition: transform 180ms cubic-bezier(.2, .9, .2, 1), box-shadow 220ms, filter 220ms;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.social-icon:hover {
+  transform: translateY(-3px) scale(1.08);
+  filter: drop-shadow(0 18px 48px rgba(0, 0, 0, 0.45));
+}
+
+/* NAV: scale 2x + bold on hover/focus, arrow slides in with gold glow */
+.nav-item {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+@keyframes navArrowPulse {
+  0% {
+    filter: drop-shadow(0 0 0 rgba(246, 200, 90, 0));
+    transform: translateX(0) scale(1);
+  }
+
+  50% {
+    filter: drop-shadow(0 0 16px rgba(246, 200, 90, 0.28));
+    transform: translateX(-2px) scale(1.02);
+  }
+
+  100% {
+    filter: drop-shadow(0 0 0 rgba(246, 200, 90, 0));
+    transform: translateX(0) scale(1);
+  }
+}
+
+.nav-item:focus .nav-arrow,
+.nav-item:hover .nav-arrow {
+  animation: navArrowPulse 1.6s ease-in-out infinite;
+}
+
+/* -------------------------
+   Mobile orbit (centered, glowing, with orbit paths)
+   ------------------------- */
+
+/* Orbit visuals (re-using earlier orbit-mobile classes) */
+.orbit-wrap-mobile {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  pointer-events: none;
+}
+.orbit-center-mobile { width: 100%; height: 100%; position: relative; }
+
+/* orbit path and glow are already created in JS inline styles -- add subtle backdrop/glow for the whole circle */
+.mobile-orbit-absolute .orbit-wrap-mobile::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: radial-gradient(circle at 50% 35%, rgba(255,230,160,0.03), rgba(0,0,0,0.7));
+  box-shadow: 0 10px 60px rgba(246,200,90,0.07), inset 0 6px 30px rgba(0,0,0,0.6);
+  pointer-events: none;
+}
+
+/* stronger glow for sun center and planets already applied inline; ensure they remain visible above the backdrop */
+.orbit-center-mobile .sun-mobile,
+.orbit-center-mobile .planet-mobile { position: relative; z-index: 2; }
+
+/* reduce motion respect */
+@media (prefers-reduced-motion: reduce) {
+  .orbit-mobile { animation: none !important; transition: none !important; }
+}
+
+/* each orbit container rotates — planet sits at translateX(r) */
+.orbit-mobile {
+  position: absolute;
+  left: 30;
+  top: 0;
+  transform-origin: center;
+  animation-name: orbit-rotate-mobile;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes orbit-rotate-mobile {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* visible orbit ring (faint) */
+.orbit-path {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-60%, -60%);
+  border-radius: 999px;
+  background: transparent;
+  pointer-events: none;
+}
+
+/* planet */
+.planet-mobile {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transform-origin: center;
+  transition: transform 200ms;
+}
+
+/* Saturn: ring element */
+.planet-saturn {
+  position: relative;
+}
+
+.planet-saturn .saturn-ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) rotate(-18deg);
+  width: 56px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid rgba(246, 200, 90, 0.18);
+  box-shadow: 0 0 24px rgba(246, 200, 90, 0.12), inset 0 0 12px rgba(0, 0, 0, 0.24);
+  background: linear-gradient(90deg, rgba(246, 200, 90, 0.05), rgba(255, 255, 255, 0.02));
+  pointer-events: none;
+}
+
+/* sun center */
+.sun-mobile {
+  position: absolute;
+  left: 75%;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  filter: drop-shadow(0 0 28px rgba(255, 213, 122, 0.33));
+}
+
+/* small tweak on very narrow screens so it doesn't overlap bottom */
+@media (max-width: 380px) {
+  .mobile-orbit-absolute { right: 8px; top: 38%; width: 120px; height: 120px; }
+}
+
+/* hide on md+ (desktop) */
+@media (min-width: 768px) {
+  .mobile-orbit-absolute { display: none !important; }
+}
+
+
+/* reduce motion respect */
+@media (prefers-reduced-motion: reduce) {
+  .orbit-mobile {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .nav-arrow {
+    animation: none !important;
+    transition: none !important;
+  }
 }

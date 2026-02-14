@@ -26,28 +26,18 @@ export default function Header() {
   const [active, setActive] = useState<string>('about');
   const [isMobile, setIsMobile] = useState<boolean>(false);
 
-  // refs for measurement
   const navContainerRef = useRef<HTMLDivElement | null>(null);
   const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const mountedRef = useRef(false);
 
-  // pill visual state
   const [pill, setPill] = useState({ x: 0, w: 0, visible: false });
 
-  // suppress observer while manual scroll animates
   const suppressObserverRef = useRef<number | null>(null);
-
-  // long press state for mobile bubble (and explicit show on focus)
   const longPressTimers = useRef<Record<string, number | null>>({});
   const [showLabelFor, setShowLabelFor] = useState<string | null>(null);
 
-  // when bubble would be off-screen above, show below instead
-  const [bubbleBelow, setBubbleBelow] = useState<Record<string, boolean>>({});
-
-  // header top safe area
   const headerTop = useMemo(() => `calc(env(safe-area-inset-top, 0px) + 20px)`, []);
 
-  /* ---------- responsive ---------- */
   useEffect(() => {
     const onResize = () => setIsMobile(window.innerWidth < 900);
     onResize();
@@ -55,7 +45,6 @@ export default function Header() {
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
-  /* ---------- IntersectionObserver scroll-spy (robust) ---------- */
   useEffect(() => {
     if (mountedRef.current) return;
     mountedRef.current = true;
@@ -65,11 +54,10 @@ export default function Header() {
 
     const observerOptions: IntersectionObserverInit = {
       root: null,
-      rootMargin: '0px 0px -40% 0px', // keep top edge normal, only shrink bottom viewport for "in-view" decisions
+      rootMargin: '0px 0px -40% 0px', 
       threshold: [0, 0.1, 0.4, 0.6, 0.9, 1],
     };
 
-    // robust function to pick the section with largest visible height
     const updateActiveFromRects = () => {
       if (suppressObserverRef.current) return;
 
@@ -85,14 +73,12 @@ export default function Header() {
           bestId = el.id;
         }
       });
-      // If scrolled all the way to top, ensure 'about' is active
       if (window.scrollY === 0) bestId = 'about';
       if (bestId !== null) {
         setActive(prev => (prev === bestId ? prev : bestId as string));
       }
     };
 
-    // IntersectionObserver will trigger during scroll; use it to call our robust picker
     const onIntersect: IntersectionObserverCallback = () => {
       updateActiveFromRects();
     };
@@ -100,7 +86,6 @@ export default function Header() {
     const io = new IntersectionObserver(onIntersect, observerOptions);
     sections.forEach((s) => io.observe(s));
 
-    // init immediately so active is correct on mount (fixes "not active until click")
     updateActiveFromRects();
 
     return () => io.disconnect();
@@ -108,7 +93,6 @@ export default function Header() {
   }, []);
 
 
-  /* ---------- suppress observer helper ---------- */
   const suppressObserver = (ms = 900) => {
     if (suppressObserverRef.current) {
       window.clearTimeout(suppressObserverRef.current);
@@ -123,21 +107,18 @@ export default function Header() {
     const el = document.getElementById(id);
     if (!el) return;
 
-    // measure header height dynamically (covers mobile/desktop)
     const headerEl = document.querySelector('header');
     const headerHeight = headerEl ? Math.ceil(headerEl.getBoundingClientRect().height) : 80;
-    const extraOffset = 8; // breathing room below header
+    const extraOffset = 8;
 
     const top = el.getBoundingClientRect().top + window.scrollY - headerHeight - extraOffset;
     window.scrollTo({ top, behavior: 'smooth' });
   };
 
-  /* ---------- measure pill position & bubble direction ---------- */
   const measure = useCallback(() => {
     const nav = navContainerRef.current;
     if (!nav) return;
 
-    // measure active tab button
     const activeBtn = tabRefs.current[active];
     if (activeBtn && nav) {
       const navRect = nav.getBoundingClientRect();
@@ -148,23 +129,9 @@ export default function Header() {
     } else {
       setPill((p) => ({ ...p, visible: false }));
     }
-
-    // compute bubbleBelow per visible icon (mobile)
-    const newBubbleBelow: Record<string, boolean> = {};
-    TABS.forEach((t) => {
-      const btn = tabRefs.current[t.id];
-      if (!btn) return;
-      const rect = btn.getBoundingClientRect();
-      // if the top of the icon is too close to top viewport (e.g., < 80px), show bubble below
-      const shouldShowBelow = rect.top < 88;
-      newBubbleBelow[t.id] = shouldShowBelow;
-    });
-    setBubbleBelow(newBubbleBelow);
   }, [active]);
 
-  /* measure on mount, on active change, on resize & on scroll (rAF throttled) */
   useLayoutEffect(() => {
-    // initial measure
     measure();
 
     let raf = 0;
@@ -185,14 +152,6 @@ export default function Header() {
     };
   }, [measure]);
 
-  /* ---------- mobile long-press handlers (show label only on long-press or focus) ---------- */
-  const handlePointerDown = (tabId: string) => {
-    if (longPressTimers.current[tabId]) window.clearTimeout(longPressTimers.current[tabId]!);
-    longPressTimers.current[tabId] = window.setTimeout(() => {
-      setShowLabelFor(tabId);
-      longPressTimers.current[tabId] = null;
-    }, 300);
-  };
   const handlePointerUpOrLeave = (tabId: string) => {
     if (longPressTimers.current[tabId]) {
       window.clearTimeout(longPressTimers.current[tabId]!);
@@ -331,14 +290,10 @@ export default function Header() {
                   <nav ref={navContainerRef} className="flex items-center gap-3" aria-label="Primary mobile">
                     {TABS.map((tab) => {
                       const isActive = tab.id === active;
-                      const showBubble = showLabelFor === tab.id || isActive;
-                      const below = !!bubbleBelow[tab.id];
-
                       return (
                         <div key={tab.id} className="relative">
                           <motion.button
                             ref={(el) => { tabRefs.current[tab.id] = el; }}
-                            onPointerDown={() => handlePointerDown(tab.id)}
                             onPointerUp={() => handlePointerUpOrLeave(tab.id)}
                             onPointerLeave={() => handlePointerUpOrLeave(tab.id)}
                             onClick={() => {
@@ -355,22 +310,6 @@ export default function Header() {
                           >
                             <Image src={iconSrc(tab.icon)} alt={tab.label} width={22} height={22} draggable={false} />
                           </motion.button>
-
-                          {/* Bubble - either above or below depending on space */}
-                          <motion.div
-                            initial={{ opacity: 0, y: 6, scale: 0.98 }}
-                            animate={showBubble ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 6, scale: 0.98 }}
-                            transition={shouldReduceMotion ? { duration: 0.06 } : { type: 'spring', stiffness: 700, damping: 46 }}
-                            className="absolute left-1/2 -translate-x-1/2 pointer-events-none z-40"
-                            style={below ? { top: 'calc(100% + 8px)' } : { top: '-44px' }}
-                          >
-                            <div
-                              className={`px-3 py-1 rounded-full text-xs font-medium select-none ${isActive ? 'bg-white/10 text-white' : 'bg-white/6 text-white/85'}`}
-                              style={{ backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.04)' }}
-                            >
-                              {tab.label}
-                            </div>
-                          </motion.div>
                         </div>
                       );
                     })}

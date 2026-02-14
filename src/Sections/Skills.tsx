@@ -36,8 +36,10 @@ export default function SkillsSection() {
     const radiusStep = isMobile ? 45 : 48;
 
     return (
-        <section id="skills" className="relative w-full bg-gradient-to-b from-[#020204] via-[#04131a] to-[#031016] text-white relative" style={{ paddingTop: isMobile ? 0 : 40, paddingBottom: 60 }}>
-            <div className="max-w-6xl mx-auto px-4">
+        <section id="skills" className="no-select relative w-full bg-gradient-to-b from-[#020204] via-[#04131a] to-[#031016] text-white relative" 
+        style={{ paddingTop: isMobile ? 0 : 40, paddingBottom: 60 }}>
+             <div className="edge-fade pointer-events-none absolute inset-0 z-0" />
+            <div className="max-w-6xl mx-auto px-4 relative z-10">
                 <div className="mb-8 text-center">
                     <h2 className="text-3xl md:text-4xl font-extrabold text-[#f6c85a]">My Skills</h2>
                     <p className="mt-2 max-w-3xl mx-auto text-sm text-white/70">
@@ -98,7 +100,6 @@ export default function SkillsSection() {
           .ring-anim { animation: none !important; transform: none !important; }
         }
       `}</style>
-            <div className="pointer-events-none absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black/80 to-transparent" />
 
         </section>
     );

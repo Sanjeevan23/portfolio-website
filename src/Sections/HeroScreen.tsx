@@ -38,7 +38,10 @@ function HorizonSilhouette({ radius = 140, thickness = 0.18, yOffset = -28 }: { 
     // dispose glow tex on unmount
     useEffect(() => {
         return () => {
-            try { glowTex.dispose(); } catch (e) { /* ignore */ }
+            try { glowTex.dispose(); } 
+            catch { 
+                /* ignore */ 
+            }
         };
     }, [glowTex]);
 
@@ -82,15 +85,15 @@ function SurfaceCamera({ planetRadius = 1.62, heightOffset = 0.08 }: { planetRad
     useEffect(() => {
         const cam = camera as THREE.PerspectiveCamera;
         cam.position.set(0, planetRadius + heightOffset, 2.4);
-        cam.fov = 50;
+        // cam.fov = 50;
         cam.updateProjectionMatrix();
     }, [camera, planetRadius, heightOffset]);
 
     useFrame((state) => {
         const t = state.clock.elapsedTime * 0.3;
-        const orbitX = Math.sin(t * 0.4) * 0.18;
+        // const orbitX = Math.sin(t * 0.4) * 0.18;
         const orbitZ = 2.4 + Math.cos(t * 0.4) * 0.1;
-        camera.position.x = orbitX;
+        // camera.position.x = orbitX;
         camera.position.z = orbitZ;
         camera.position.y = planetRadius + heightOffset + Math.sin(t * 0.9) * 0.02;
         camera.lookAt(0, 0.1, -1.2);

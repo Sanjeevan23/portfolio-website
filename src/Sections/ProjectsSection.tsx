@@ -74,8 +74,8 @@ export default function ProjectsSection() {
         <section id="projects" className="relative w-full py-16 bg-[linear-gradient(180deg,#000007,#02030a)] text-white">
             <div className="max-w-7xl mx-auto px-4">
                 <div className="mb-10 text-center">
-                    <h2 className="text-3xl md:text-4xl font-extrabold text-[#f6c85a]">Projects</h2>
-                    <p className="mt-3 text-white/70 max-w-3xl mx-auto">Completed works - websites, mobile apps, backend systems and design work. Click any project to view details.</p>
+                    <h2 className="no-select text-3xl md:text-4xl font-extrabold text-[#f6c85a]">Projects</h2>
+                    <p className="no-select mt-3 text-white/70 max-w-3xl mx-auto">Completed works - websites, mobile apps, backend systems and design work. Click any project to view details.</p>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -123,6 +123,8 @@ export default function ProjectsSection() {
             </div>
 
             <ProjectModal project={openProject} onClose={() => setOpenProject(null)} />
+            <div className="pointer-events-none absolute bottom-0 left-0 w-full h-20 bg-gradient-to-t from-black/80 to-transparent" />
+
         </section>
     );
 }

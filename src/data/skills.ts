@@ -48,7 +48,7 @@ export const SKILLS: SkillEntry[] = [
     { id: 'msoffice', label: 'MS Office', category: 'tools', color: '#217346' },
 
     // misc
-    { id: 'apk', label: 'Android APK / AAB', category: 'platform', color: '#3ddc84' },
+    { id: 'apk', label: 'APK / AAB', category: 'platform', color: '#3ddc84' },
     { id: 'webapp', label: 'Websites', category: 'platform', color: '#0ea5a4' },
     { id: 'mobileapp', label: 'Mobile Apps', category: 'platform', color: '#ffffffc5' },
 ];
