@@ -14,6 +14,7 @@ import SoftShootingStars from '../components/HeroSection/SoftShootingStars';
 import Bird from '../components/HeroSection/Bird';
 import Button from '../components/Button';
 import { useResponsivePadding } from '../hooks/useResponsivePadding';
+import AvailabilityBadge from '../components/HeroSection/AvailabilityBadge';
 
 /* ---------- MAXIMUM ANIMATION CONFIG ---------- */
 const STAR_COUNT = 20000;
@@ -38,9 +39,9 @@ function HorizonSilhouette({ radius = 140, thickness = 0.18, yOffset = -28 }: { 
     // dispose glow tex on unmount
     useEffect(() => {
         return () => {
-            try { glowTex.dispose(); } 
-            catch { 
-                /* ignore */ 
+            try { glowTex.dispose(); }
+            catch {
+                /* ignore */
             }
         };
     }, [glowTex]);
@@ -140,7 +141,7 @@ function HeroOverlay({ onContact }: { onContact: () => void }) {
                 >
                     Full-stack engineer crafting refined web and mobile experiences. Always learning, adapting, and focused on creating products with thoughtful UI/UX design that feel as good as they work.
                 </motion.p>
-
+                <AvailabilityBadge onClick={onContact} />
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.36, duration: 0.9 }} className="mt-8 flex items-center justify-center gap-4">
                     <Button
                         variant="primary"
@@ -154,6 +155,7 @@ function HeroOverlay({ onContact }: { onContact: () => void }) {
                                 }}
                                 transition={{ duration: 0.6, ease: 'easeInOut' }}
                                 className="flex items-center justify-center"
+                                whileHover={{ rotate: 36000 }}
                             >
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                                     <path
@@ -177,6 +179,7 @@ function HeroOverlay({ onContact }: { onContact: () => void }) {
                             <motion.span
                                 initial={{ rotate: 0 }}
                                 whileTap={{ rotate: 120 }}
+                                whileHover={{ rotate: 90 }}
                                 transition={{ duration: 0.45, ease: [0.4, 0, 0.2, 1] }}
                                 className="relative flex items-center justify-center w-8 h-8"
                             >

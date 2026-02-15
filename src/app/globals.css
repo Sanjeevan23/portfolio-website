@@ -222,31 +222,35 @@ body {
 
 /* Orbit visuals (re-using earlier orbit-mobile classes) */
 .orbit-wrap-mobile {
-  width: 100%;
-  height: 100%;
   position: relative;
   pointer-events: none;
 }
-.orbit-center-mobile { width: 100%; height: 100%; position: relative; }
+
+.orbit-center-mobile {
+  position: relative;
+}
 
 /* orbit path and glow are already created in JS inline styles -- add subtle backdrop/glow for the whole circle */
 .mobile-orbit-absolute .orbit-wrap-mobile::before {
   content: '';
   position: absolute;
   inset: 0;
-  border-radius: 999px;
-  background: radial-gradient(circle at 50% 35%, rgba(255,230,160,0.03), rgba(0,0,0,0.7));
-  box-shadow: 0 10px 60px rgba(246,200,90,0.07), inset 0 6px 30px rgba(0,0,0,0.6);
   pointer-events: none;
 }
 
 /* stronger glow for sun center and planets already applied inline; ensure they remain visible above the backdrop */
 .orbit-center-mobile .sun-mobile,
-.orbit-center-mobile .planet-mobile { position: relative; z-index: 2; }
+.orbit-center-mobile .planet-mobile {
+  position: relative;
+  z-index: 2;
+}
 
 /* reduce motion respect */
 @media (prefers-reduced-motion: reduce) {
-  .orbit-mobile { animation: none !important; transition: none !important; }
+  .orbit-mobile {
+    animation: none !important;
+    transition: none !important;
+  }
 }
 
 /* each orbit container rotates — planet sits at translateX(r) */
@@ -264,6 +268,7 @@ body {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -320,17 +325,23 @@ body {
   border-radius: 999px;
   transform: translate(-50%, -50%);
   border: 1px solid rgba(255, 255, 255, 0.12);
-  filter: drop-shadow(0 0 28px rgba(255, 213, 122, 0.33));
 }
 
 /* small tweak on very narrow screens so it doesn't overlap bottom */
 @media (max-width: 380px) {
-  .mobile-orbit-absolute { right: 8px; top: 38%; width: 120px; height: 120px; }
+  .mobile-orbit-absolute {
+    right: 8px;
+    top: 38%;
+    width: 120px;
+    height: 120px;
+  }
 }
 
 /* hide on md+ (desktop) */
 @media (min-width: 768px) {
-  .mobile-orbit-absolute { display: none !important; }
+  .mobile-orbit-absolute {
+    display: none !important;
+  }
 }
 
 
@@ -346,3 +357,4 @@ body {
     transition: none !important;
   }
 }
+

@@ -54,7 +54,7 @@ export default function Header() {
 
     const observerOptions: IntersectionObserverInit = {
       root: null,
-      rootMargin: '0px 0px -40% 0px', 
+      rootMargin: '0px 0px -40% 0px',
       threshold: [0, 0.1, 0.4, 0.6, 0.9, 1],
     };
 
@@ -197,7 +197,7 @@ export default function Header() {
                   whileTap={{ scale: tapScale }}
                   transition={{ duration: 0.08 }}
                   className="flex items-center gap-3 focus:outline-none clickable"
-                  
+
                   aria-label="Go to top"
                 >
                   <motion.span
@@ -211,22 +211,27 @@ export default function Header() {
                 </motion.button>
               ) : (
                 <motion.button
-                  onClick={() => {
-                    setActive('about');
-                    scrollTo('about');
-                  }}
                   whileTap={{ scale: tapScale }}
-                  className="w-10 h-10 rounded-full bg-white/6 flex items-center justify-center backdrop-blur-sm focus:outline-none clickable"
+                  className="w-10 h-10 rounded-full bg-white/6 flex items-center justify-center backdrop-blur-sm focus:outline-none"
                   aria-label="logo"
                 >
-                  <motion.span
+                  <motion.div
                     initial={{ scale: 0.9, rotate: -6 }}
                     animate={{ scale: 1, rotate: 0 }}
                     transition={{ type: 'spring', stiffness: 420, damping: 28 }}
-                    className="text-white font-bold"
+                    className="w-5 h-5 select-none"
                   >
-                    S
-                  </motion.span>
+                    <Image
+                      src="/logo.png"
+                      alt="logo"
+                      width={20}
+                      height={20}
+                      draggable={false}
+                      priority
+                      className="object-contain select-none"
+                    />
+                  </motion.div>
+
                 </motion.button>
               )}
             </div>

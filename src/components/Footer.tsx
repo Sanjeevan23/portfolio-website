@@ -17,6 +17,7 @@ import {
 import StarField from './HeroSection/StarField';
 import SoftShootingStars from './HeroSection/SoftShootingStars';
 import { contact } from '../data/contact';
+import Image from 'next/image';
 
 const BRAND_COLORS: Record<string, string> = {
   github: '#ffffffe2',
@@ -115,7 +116,7 @@ function OrbitSystem({ size = 120 }: { size?: number }) {
                 width: size,
                 height: size,
                 borderColor: '#ffffff0e',
-                borderWidth:0.1,
+                borderWidth: 0.1,
               }}
             />
 
@@ -191,9 +192,20 @@ export default function Footer() {
           {/* LEFT */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-white/6 to-white/2 flex items-center justify-center border border-white/6 text-black font-bold">
-                S
+              <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-white/6 to-white/2 flex items-center justify-center border border-white/6 overflow-hidden">
+                <div className="w-7 h-7 pointer-events-none select-none">
+                  <Image
+                    src="/logo.png"
+                    alt="Sanjeevan logo"
+                    width={28}
+                    height={28}
+                    draggable={false}
+                    priority
+                    className="object-contain pointer-events-none select-none"
+                  />
+                </div>
               </div>
+
               <div>
                 <div className="text-lg font-extrabold text-[#f6c85a]">Sanjeevan</div>
                 <div className="text-xs text-white/70">Full-stack Engineer</div>
@@ -245,9 +257,9 @@ export default function Footer() {
             </ul>
 
             {/* MOBILE-ONLY ORBIT: centered and fully inside column */}
-             <div className="mobile-orbit-absolute md:hidden" aria-hidden>
-          <OrbitSystem size={100} />
-        </div>
+            <div className="mobile-orbit-absolute md:hidden" aria-hidden>
+              <OrbitSystem size={100} />
+            </div>
           </div>
         </div>
 
